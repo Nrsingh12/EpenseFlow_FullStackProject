@@ -1,0 +1,88 @@
+# ExpenseFlow - Personal Expense Tracker
+
+A simple full-stack web app to track your expenses and visualize spending.
+
+---
+
+## Problem Statement
+
+Tracking daily expenses is often messy when using notes and spreadsheets. This leads to poor money management and overspending. **ExpenseFlow** provides one easy place to add expenses, see your spending, and stay on budget.
+
+---
+
+## System Architecture
+
+- **Frontend**: React.js, React Router
+- **Backend**: Node.js, Express.js
+- **Database**: MySQL / MongoDB (with Prisma ORM)
+- **Authentication**: JWT-based login/signup
+- **Hosting**
+  - Frontend: Netlify / Vercel
+  - Backend: Render / Railway
+  - Database: MySQL Atlas / MongoDB Atlas / ElephantSQL / Aiven
+
+---
+
+## Key Features
+
+| Category   | Feature                | Description                                                             |
+|------------|------------------------|-------------------------------------------------------------------------|
+| Auth       | Sign up, log in, log out | User registration with JWT authentication                             |
+| Expenses   | CRUD                   | Add, view, edit, and delete entries; complete expense management        |
+| Pages      | Home, Login, Dashboard | Multi-page navigation using React Router                                |
+| Searching  | Search by description  | Full-text search to find expenses by description text                   |
+| Sorting    | Sort by date, amount, category | Click table headers to sort expenses ascending/descending         |
+| Filtering  | Filter by category, date range, amount range | Multi-criteria filtering with dropdown/date pickers   |
+| Pagination | Display expenses by page | Navigate large expense lists with page numbers and next/prev buttons   |
+
+---
+
+## Additional Features
+
+- **Hosting**: Deploy both backend and frontend to accessible URLs for live production
+- **Responsive Design**: Mobile and desktop support; works seamlessly on all devices
+
+---
+
+## Tech Stack
+
+| Layer      | Technologies                                |
+|------------|---------------------------------------------|
+| Frontend   | React.js, React Router, TailwindCSS         |
+| Backend    | Node.js, Express.js                         |
+| Database   | MySQL, MongoDB, Prisma ORM                  |
+| Auth       | JWT, OAuth                                  |
+| Hosting    | Vercel (Frontend), Render (Backend), MySQL Atlas, MongoDB Atlas (DB) |
+
+---
+
+## API Overview
+
+List of core APIs supporting search, sort, filter, and pagination:
+
+| Endpoint                  | Method | Description                      | Access           |
+|---------------------------|--------|----------------------------------|------------------|
+| `/api/auth/signup`        | POST   | Create account                   | Anyone           |
+| `/api/auth/login`         | POST   | Login                            | Anyone           |
+| `/api/auth/logout`        | POST   | Logout                           | Logged-in users  |
+| `/api/expenses`           | GET    | List all expenses with pagination| Logged-in users  |
+| `/api/expenses`           | POST   | Add an expense                   | Logged-in users  |
+| `/api/expenses/:id`       | GET    | Get single expense               | Logged-in users  |
+| `/api/expenses/:id`       | PUT    | Edit expense                     | Logged-in users  |
+| `/api/expenses/:id`       | DELETE | Remove expense                   | Logged-in users  |
+| `/api/analytics/summary`  | GET    | Expense stats for dashboard      | Logged-in users  |
+
+---
+
+## Deployment
+
+Deploy the frontend and backend to the chosen hosting providers and connect to the managed database services for a full production setup.
+
+---
+
+## Responsive Design
+
+The application is designed to support both desktop and mobile devices for seamless experience everywhere.
+
+---
+
