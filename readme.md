@@ -6,7 +6,7 @@ A modern full-stack web application to track your expenses, visualize spending p
 
 ## Problem Statement
 
-Tracking daily expenses is often messy when using notes and spreadsheets. This leads to poor money management and overspending. **ExpenseFlow** provides one easy place to add expenses, see your spending, and stay on budget.
+Managing personal finances can be challenging without proper tools. Traditional methods like spreadsheets and notes are time-consuming and error-prone. **ExpenseFlow** simplifies expense tracking by providing an intuitive platform to record expenses, analyze spending patterns, and maintain financial discipline.
 
 ---
 
