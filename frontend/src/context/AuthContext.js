@@ -70,10 +70,14 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
+      // Clear all auth-related data
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       api.setToken(null);
       setUser(null);
+      
+      // Clear any cached data
+      sessionStorage.clear();
     }
   };
 
