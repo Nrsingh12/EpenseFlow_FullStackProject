@@ -48,11 +48,11 @@ Managing personal finances can be challenging without proper tools. Traditional 
 
 | Layer      | Technologies                                |
 |------------|---------------------------------------------|
-| Frontend   | React.js, React Router, TailwindCSS         |
+| Frontend   | React.js, React Router, CSS3                |
 | Backend    | Node.js, Express.js                         |
-| Database   | MySQL, MongoDB, Prisma ORM                  |
-| Auth       | JWT, OAuth                                  |
-| Hosting    | Vercel (Frontend), Render (Backend), MySQL Atlas, MongoDB Atlas (DB) |
+| Database   | SQLite (Development), Prisma ORM            |
+| Auth       | JWT (JSON Web Tokens)                       |
+| Hosting    | Vercel (Frontend), Render (Backend)         |
 
 ---
 
