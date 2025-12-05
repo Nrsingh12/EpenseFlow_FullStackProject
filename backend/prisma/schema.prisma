@@ -10,27 +10,30 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+// User model for authentication and profile management
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
-  password  String
+  password  String    // Hashed password
   name      String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  expenses  Expense[]
+  expenses  Expense[] // One-to-many relationship with expenses
 }
 
+// Expense model for tracking user expenses
 model Expense {
   id          String   @id @default(cuid())
   description String
-  amount      Float
-  category    String
+  amount      Float    // Expense amount in currency
+  category    String   // Category for grouping expenses
   date        DateTime @default(now())
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Indexes for optimized queries
   @@index([userId])
   @@index([date])
   @@index([category])
