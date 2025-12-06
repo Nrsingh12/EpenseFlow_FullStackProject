@@ -113,7 +113,12 @@ cd frontend
 npm install
 ```
 
-4. Set up environment variables in `backend/.env`
+4. Set up environment variables:
+```bash
+cd backend
+cp .env.example .env
+# Edit .env with your configuration
+```
 
 5. Run database migrations:
 ```bash
