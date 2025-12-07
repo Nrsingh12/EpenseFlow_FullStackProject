@@ -12,14 +12,16 @@ Managing personal finances can be challenging without proper tools. Traditional 
 
 ## System Architecture
 
-- **Frontend**: React.js, React Router
-- **Backend**: Node.js, Express.js
-- **Database**: MySQL / MongoDB (with Prisma ORM)
-- **Authentication**: JWT-based login/signup
-- **Hosting**
-  - Frontend: Netlify / Vercel
-  - Backend: Render / Railway
-  - Database: MySQL Atlas / MongoDB Atlas / ElephantSQL / Aiven
+ExpenseFlow follows a modern three-tier architecture:
+
+- **Frontend**: React.js single-page application with React Router for navigation
+- **Backend**: RESTful API built with Node.js and Express.js
+- **Database**: SQLite (development) with Prisma ORM for type-safe database access
+- **Authentication**: Secure JWT-based authentication system
+- **Deployment**
+  - Frontend: Vercel for fast CDN delivery
+  - Backend: Render for reliable API hosting
+  - Database: Managed database service for production
 
 ---
 
