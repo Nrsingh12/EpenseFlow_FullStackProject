@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('../prisma/client');
 
+/**
+ * Middleware to authenticate JWT tokens
+ * Verifies the token and attaches user data to the request
+ */
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
