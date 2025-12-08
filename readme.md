@@ -1,6 +1,6 @@
 # ExpenseFlow - Personal Expense Tracker
 
-A simple full-stack web app to track your expenses and visualize spending.
+A modern full-stack web application to track your expenses, visualize spending patterns, and manage your personal finances effectively.
 
 ---
 
