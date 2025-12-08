@@ -20,7 +20,7 @@
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-size: 3.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
   line-height: 1.2;
@@ -29,7 +29,7 @@
 }
 
 .hero-subtitle {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   margin-bottom: 2rem;
   color: #64748b;
   max-width: 600px;
@@ -51,7 +51,7 @@
   padding: 0.875rem 1.75rem;
   border-radius: 8px;
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   text-decoration: none;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -113,7 +113,7 @@
 }
 
 .stat-number {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: #1a202c;
@@ -121,7 +121,7 @@
 }
 
 .stat-label {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   color: #64748b;
   font-weight: 500;
 }
@@ -142,7 +142,7 @@
 }
 
 .section-header h2 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 600;
   color: #1a202c;
   margin-bottom: 0.75rem;
@@ -150,7 +150,7 @@
 }
 
 .section-header p {
-  font-size: 1rem;
+  font-size: 1.125rem;
   color: #64748b;
 }
 
@@ -189,7 +189,7 @@
 }
 
 .feature-box h3 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #1a202c;
   margin-bottom: 0.75rem;
@@ -197,7 +197,7 @@
 }
 
 .feature-box p {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: #64748b;
   line-height: 1.6;
 }
@@ -215,7 +215,7 @@
 }
 
 .cta-container h2 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: #1a202c;
@@ -223,7 +223,7 @@
 }
 
 .cta-container p {
-  font-size: 1rem;
+  font-size: 1.125rem;
   margin-bottom: 2rem;
   color: #64748b;
 }
