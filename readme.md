@@ -86,3 +86,49 @@ The application is designed to support both desktop and mobile devices for seaml
 
 ---
 
+## Getting Started
+
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+- MySQL or MongoDB database
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/ExpenseFlow.git
+cd ExpenseFlow
+```
+
+2. Install backend dependencies:
+```bash
+cd backend
+npm install
+```
+
+3. Install frontend dependencies:
+```bash
+cd frontend
+npm install
+```
+
+4. Set up environment variables in `backend/.env`
+
+5. Run database migrations:
+```bash
+cd backend
+npx prisma migrate dev
+```
+
+6. Start the development servers:
+```bash
+# Backend (from backend directory)
+npm start
+
+# Frontend (from frontend directory)
+npm start
+```
+
+---
+
