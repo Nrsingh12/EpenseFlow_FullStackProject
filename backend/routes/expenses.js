@@ -29,11 +29,10 @@ router.get('/', authenticateToken, async (req, res) => {
       userId: req.user.id
     };
 
-    // Search by description (MySQL supports contains)
+    // Search by description
     if (search) {
       where.description = {
-        contains: search,
-        mode: 'insensitive'
+        contains: search
       };
     }
 

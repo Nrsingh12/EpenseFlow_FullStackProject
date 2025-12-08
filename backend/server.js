@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 5001;
 
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:3001',
   'https://epense-flow-full-stack-project-fron.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean);
@@ -53,17 +54,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-const prisma = require('./prisma/client');
-
-app.listen(PORT, async () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📡 API available at http://localhost:${PORT}/api`);
-  
-  try {
-    await prisma.$connect();
-    console.log('✅ Database connection successful');
-  } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
-  }
 });
 
