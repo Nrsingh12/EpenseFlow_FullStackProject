@@ -11,42 +11,115 @@ const Home = () => {
     <>
       <Navbar />
       <div className="home">
-        <div className="home-hero">
-          <h1>Welcome to ExpenseFlow</h1>
-          <p className="home-subtitle">Track your expenses, manage your budget, and take control of your finances</p>
-          {user ? (
-            <Link to="/dashboard" className="home-button">
-              Go to Dashboard
-            </Link>
-          ) : (
-            <div className="home-actions">
-              <Link to="/signup" className="home-button primary">
-                Get Started
-              </Link>
-              <Link to="/login" className="home-button secondary">
-                Login
-              </Link>
+        <section className="hero-section">
+          <div className="hero-container">
+            <div className="hero-content">
+              <h1 className="hero-title">Take Control of Your Finances</h1>
+              <p className="hero-subtitle">
+                Track expenses, analyze spending patterns, and achieve your financial goals with ExpenseFlow
+              </p>
+              {user ? (
+                <Link to="/dashboard" className="cta-button">
+                  Go to Dashboard →
+                </Link>
+              ) : (
+                <div className="hero-buttons">
+                  <Link to="/signup" className="cta-button primary">
+                    Get Started Free
+                  </Link>
+                  <Link to="/login" className="cta-button secondary">
+                    Sign In
+                  </Link>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className="home-features">
-          <div className="feature-card">
-            <h3>Easy Tracking</h3>
-            <p>Add expenses quickly and categorize them for better organization</p>
+            <div className="hero-stats">
+              <div className="stat-box">
+                <div className="stat-icon">📊</div>
+                <div className="stat-number">10K+</div>
+                <div className="stat-label">Active Users</div>
+              </div>
+              <div className="stat-box">
+                <div className="stat-icon">💰</div>
+                <div className="stat-number">₹50Cr+</div>
+                <div className="stat-label">Tracked</div>
+              </div>
+              <div className="stat-box">
+                <div className="stat-icon">⭐</div>
+                <div className="stat-number">4.9/5</div>
+                <div className="stat-label">Rating</div>
+              </div>
+            </div>
           </div>
-          <div className="feature-card">
-            <h3>Smart Analytics</h3>
-            <p>View spending patterns and insights with detailed analytics</p>
+        </section>
+
+        <section className="features-section">
+          <div className="section-container">
+            <div className="section-header">
+              <h2>Why Choose ExpenseFlow?</h2>
+              <p>Everything you need to manage your money better</p>
+            </div>
+            <div className="features-grid">
+              <div className="feature-box">
+                <div className="feature-icon-wrapper">
+                  <span className="feature-icon">📱</span>
+                </div>
+                <h3>Easy to Use</h3>
+                <p>Simple and intuitive interface that makes expense tracking effortless</p>
+              </div>
+              <div className="feature-box">
+                <div className="feature-icon-wrapper">
+                  <span className="feature-icon">📈</span>
+                </div>
+                <h3>Smart Analytics</h3>
+                <p>Get insights into your spending habits with detailed charts and reports</p>
+              </div>
+              <div className="feature-box">
+                <div className="feature-icon-wrapper">
+                  <span className="feature-icon">🔒</span>
+                </div>
+                <h3>Secure & Private</h3>
+                <p>Your financial data is encrypted and protected with industry-standard security</p>
+              </div>
+              <div className="feature-box">
+                <div className="feature-icon-wrapper">
+                  <span className="feature-icon">🎯</span>
+                </div>
+                <h3>Goal Tracking</h3>
+                <p>Set budgets and track your progress towards financial goals</p>
+              </div>
+              <div className="feature-box">
+                <div className="feature-icon-wrapper">
+                  <span className="feature-icon">🔍</span>
+                </div>
+                <h3>Advanced Filters</h3>
+                <p>Find any expense quickly with powerful search and filter options</p>
+              </div>
+              <div className="feature-box">
+                <div className="feature-icon-wrapper">
+                  <span className="feature-icon">📊</span>
+                </div>
+                <h3>Category Management</h3>
+                <p>Organize expenses by categories for better financial overview</p>
+              </div>
+            </div>
           </div>
-          <div className="feature-card">
-            <h3>Search & Filter</h3>
-            <p>Find expenses easily with powerful search, sort, and filter options</p>
+        </section>
+
+        <section className="cta-section">
+          <div className="cta-container">
+            <h2>Ready to Start Your Financial Journey?</h2>
+            <p>Join thousands of users who are already managing their money smarter</p>
+            {!user && (
+              <Link to="/signup" className="cta-button large">
+                Start Free Today →
+              </Link>
+            )}
           </div>
-        </div>
+        </section>
       </div>
     </>
   );
 };
 
 export default Home;
-
