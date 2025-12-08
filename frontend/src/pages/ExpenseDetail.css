@@ -1,49 +1,59 @@
 .expense-detail {
   min-height: calc(100vh - 80px);
   padding: 2rem 1rem;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .expense-detail-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 .back-link {
-  display: inline-block;
-  color: #4a90e2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
   text-decoration: none;
   margin-bottom: 1.5rem;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .back-link:hover {
-  color: #357abd;
-  text-decoration: underline;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-4px);
 }
 
 .expense-card,
 .expense-form-card {
   background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .expense-form-card h2,
 .expense-card h2 {
   color: #333;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #667eea;
 }
 
 .expense-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .expense-actions {
@@ -55,50 +65,59 @@
 .delete-btn,
 .save-btn,
 .cancel-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .edit-btn {
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .edit-btn:hover {
-  background-color: #357abd;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
 .delete-btn {
-  background-color: #f44336;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
 }
 
 .delete-btn:hover {
-  background-color: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 87, 108, 0.4);
 }
 
 .save-btn {
-  background-color: #4caf50;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 2rem;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
 .save-btn:hover {
-  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
 }
 
 .cancel-btn {
-  background-color: #9e9e9e;
+  background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 2rem;
+  box-shadow: 0 4px 12px rgba(158, 158, 158, 0.3);
 }
 
 .cancel-btn:hover {
-  background-color: #757575;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(158, 158, 158, 0.4);
 }
 
 .expense-details {
@@ -111,77 +130,105 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
 .detail-label {
   color: #666;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .detail-value {
   color: #333;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .category-badge {
-  background-color: #e3f2fd;
-  color: #1976d2;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  font-weight: 500;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: #333;
-  font-weight: 500;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  font-weight: 600;
   font-size: 1rem;
-  transition: border-color 0.2s;
 }
 
-.form-group input:focus {
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-actions {
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .error-message {
-  background-color: #fee;
+  background: linear-gradient(135deg, #fee 0%, #fdd 100%);
   color: #c33;
-  padding: 1rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
   text-align: center;
+  font-weight: 600;
+  border-left: 4px solid #c33;
 }
 
 .loading {
   text-align: center;
   padding: 3rem;
-  color: #666;
-  font-size: 1.1rem;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
+  .expense-detail {
+    padding: 1rem 0.5rem;
+  }
+
+  .expense-card,
+  .expense-form-card {
+    padding: 1.5rem;
+  }
+
   .expense-header {
     flex-direction: column;
     align-items: stretch;
@@ -199,7 +246,15 @@
   .detail-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.75rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
   }
 }
-
