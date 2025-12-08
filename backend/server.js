@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 5001;
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://epense-flow-full-stack-project-fron.vercel.app',
+  'https://expense-flow-full-stack-project-fron.vercel.app',
+  'https://expenseflow-fullstackproject.onrender.com',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
