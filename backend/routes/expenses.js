@@ -4,7 +4,6 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Get all expenses with search, sort, filter, and pagination
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const {
@@ -24,24 +23,20 @@ router.get('/', authenticateToken, async (req, res) => {
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
 
-    // Build where clause
     const where = {
       userId: req.user.id
     };
 
-    // Search by description
     if (search) {
       where.description = {
         contains: search
       };
     }
 
-    // Filter by category
     if (category) {
       where.category = category;
     }
 
-    // Filter by date range
     if (startDate || endDate) {
       where.date = {};
       if (startDate) {
@@ -52,7 +47,6 @@ router.get('/', authenticateToken, async (req, res) => {
       }
     }
 
-    // Filter by amount range
     if (minAmount || maxAmount) {
       where.amount = {};
       if (minAmount) {
@@ -63,13 +57,11 @@ router.get('/', authenticateToken, async (req, res) => {
       }
     }
 
-    // Build orderBy
     const orderBy = {};
     const validSortFields = ['date', 'amount', 'category', 'description', 'createdAt'];
     const sortField = validSortFields.includes(sortBy) ? sortBy : 'date';
     orderBy[sortField] = sortOrder === 'asc' ? 'asc' : 'desc';
 
-    // Get expenses and total count
     const [expenses, total] = await Promise.all([
       prisma.expense.findMany({
         where,
@@ -95,7 +87,6 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-// Get single expense
 router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
@@ -118,7 +109,6 @@ router.get('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// Create expense
 router.post('/', authenticateToken, async (req, res) => {
   try {
     const { description, amount, category, date } = req.body;
@@ -144,13 +134,11 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-// Update expense
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { description, amount, category, date } = req.body;
 
-    // Check if expense exists and belongs to user
     const existingExpense = await prisma.expense.findFirst({
       where: {
         id,
@@ -180,12 +168,10 @@ router.put('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// Delete expense
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Check if expense exists and belongs to user
     const existingExpense = await prisma.expense.findFirst({
       where: {
         id,

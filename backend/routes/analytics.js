@@ -4,28 +4,23 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Get expense summary/analytics
 router.get('/summary', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Get all expenses for the user
     const expenses = await prisma.expense.findMany({
       where: { userId },
       orderBy: { date: 'desc' }
     });
 
-    // Calculate totals
     const totalExpenses = expenses.length;
     const totalAmount = expenses.reduce((sum, exp) => sum + exp.amount, 0);
 
-    // Calculate by category
     const categoryTotals = {};
     expenses.forEach(exp => {
       categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + exp.amount;
     });
 
-    // Calculate monthly totals (last 6 months)
     const monthlyTotals = {};
     const now = new Date();
     for (let i = 0; i < 6; i++) {
@@ -42,10 +37,8 @@ router.get('/summary', authenticateToken, async (req, res) => {
       }
     });
 
-    // Get recent expenses (last 5)
     const recentExpenses = expenses.slice(0, 5);
 
-    // Calculate average expense
     const averageExpense = totalExpenses > 0 ? totalAmount / totalExpenses : 0;
 
     res.json({

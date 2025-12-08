@@ -11,7 +11,7 @@ const ExpenseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  // Helper function to get current date in YYYY-MM-DD format
+  
   const getCurrentDate = () => {
     return new Date().toISOString().split('T')[0];
   };
