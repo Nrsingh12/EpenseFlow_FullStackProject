@@ -30,7 +30,12 @@ app.use('/api/analytics', analyticsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'ExpenseFlow API is running' });
+  res.json({ 
+    status: 'OK', 
+    message: 'ExpenseFlow API is running',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
 // Error handling middleware (must be after routes)
