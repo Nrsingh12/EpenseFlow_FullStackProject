@@ -12,7 +12,7 @@
 .profile h1 {
   color: #1a202c;
   margin-bottom: 2.5rem;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 600;
   letter-spacing: -0.5px;
 }
@@ -53,7 +53,7 @@
 
 .user-info h2 {
   color: #1a202c;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   margin-bottom: 0.25rem;
   font-weight: 600;
   letter-spacing: -0.3px;
@@ -61,7 +61,7 @@
 
 .user-info p {
   color: #64748b;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .stats-overview {
@@ -86,7 +86,7 @@
 
 .stat-card h3 {
   color: #64748b;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -95,7 +95,7 @@
 
 .stat-card .stat-value {
   color: #1a202c;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 600;
   margin: 0;
   letter-spacing: -0.5px;
@@ -122,7 +122,7 @@
 .profile-card h2 {
   color: #1a202c;
   margin-bottom: 1.5rem;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.3px;
 }
@@ -172,13 +172,13 @@
 .category-name {
   color: #1a202c;
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .category-amount {
   color: #1a202c;
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .monthly-trend {
@@ -202,13 +202,13 @@
 .trend-month {
   color: #64748b;
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 
 .trend-amount {
   color: #1a202c;
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .trend-progress {
@@ -270,7 +270,7 @@
 .recent-description {
   color: #1a202c;
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -278,7 +278,7 @@
 
 .recent-category {
   color: #64748b;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 .recent-right {
@@ -292,12 +292,12 @@
 .recent-amount {
   color: #1a202c;
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .recent-date {
   color: #64748b;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 .no-data {
