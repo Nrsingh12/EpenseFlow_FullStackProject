@@ -33,29 +33,40 @@ const api = {
   },
 
   post: async (url, data) => {
-    const response = await fetch(`${API_BASE_URL}${url}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(authToken && { Authorization: `Bearer ${authToken}` })
-      },
-      body: JSON.stringify(data)
-    });
-
-    let responseData;
+    console.log('API POST:', `${API_BASE_URL}${url}`, data);
     try {
-      responseData = await response.json();
-    } catch (e) {
-      responseData = { error: 'Invalid response' };
-    }
-    
-    if (!response.ok) {
-      const error = new Error(`HTTP error! status: ${response.status}`);
-      error.response = { data: responseData };
+      const response = await fetch(`${API_BASE_URL}${url}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(authToken && { Authorization: `Bearer ${authToken}` })
+        },
+        body: JSON.stringify(data)
+      });
+
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch (e) {
+        responseData = { error: 'Invalid response' };
+      }
+      
+      if (!response.ok) {
+        const error = new Error(`HTTP error! status: ${response.status}`);
+        error.response = { data: responseData };
+        throw error;
+      }
+
+      return responseData;
+    } catch (error) {
+      console.error('API POST Error:', error);
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        const networkError = new Error('Network request blocked. Please disable ad blocker or browser extensions.');
+        networkError.response = { data: { error: 'Request blocked by browser extension or ad blocker' } };
+        throw networkError;
+      }
       throw error;
     }
-
-    return responseData;
   },
 
   put: async (url, data) => {
