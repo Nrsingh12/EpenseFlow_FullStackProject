@@ -9,11 +9,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [summary, setSummary] = useState(null);
-  
-  // Filters and pagination
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState('date');
-  const [sortOrder, setSortOrder] = useState('desc');
   const [category, setCategory] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -23,6 +19,7 @@ const Dashboard = () => {
   const [limit, setLimit] = useState(10);
   const [pagination, setPagination] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   const fetchExpenses = useCallback(async () => {
     try {
@@ -30,8 +27,8 @@ const Dashboard = () => {
       const params = new URLSearchParams({
         page: page.toString(),
         limit: limit.toString(),
-        sortBy,
-        sortOrder,
+        sortBy: 'date',
+        sortOrder: 'desc',
         ...(search && { search }),
         ...(category && { category }),
         ...(startDate && { startDate }),
@@ -43,17 +40,24 @@ const Dashboard = () => {
       const data = await api.get(`/api/expenses?${params}`);
       setExpenses(data.expenses);
       setPagination(data.pagination);
-      
-      // Extract unique categories
-      const uniqueCategories = [...new Set(data.expenses.map(e => e.category))];
-      setCategories(uniqueCategories);
     } catch (err) {
       setError('Failed to fetch expenses');
       console.error(err);
     } finally {
       setLoading(false);
     }
-  }, [page, limit, sortBy, sortOrder, search, category, startDate, endDate, minAmount, maxAmount]);
+  }, [page, limit, search, category, startDate, endDate, minAmount, maxAmount]);
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const data = await api.get('/api/analytics/summary');
+      if (data.categoryTotals) {
+        setCategories(Object.keys(data.categoryTotals));
+      }
+    } catch (err) {
+      console.error('Failed to fetch categories:', err);
+    }
+  }, []);
 
   const fetchSummary = useCallback(async () => {
     try {
@@ -67,16 +71,17 @@ const Dashboard = () => {
   useEffect(() => {
     fetchExpenses();
     fetchSummary();
-  }, [fetchExpenses, fetchSummary]);
+    fetchCategories();
+  }, [fetchExpenses, fetchSummary, fetchCategories]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (search !== undefined) {
-        fetchExpenses();
+        setPage(1);
       }
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [search, fetchExpenses]);
+  }, [search]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
@@ -90,15 +95,6 @@ const Dashboard = () => {
     }
   };
 
-  const handleSort = (field) => {
-    if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortBy(field);
-      setSortOrder('asc');
-    }
-  };
-
   const clearFilters = () => {
     setSearch('');
     setCategory('');
@@ -109,14 +105,21 @@ const Dashboard = () => {
     setPage(1);
   };
 
+  const hasActiveFilters = search || category || startDate || endDate || minAmount || maxAmount;
+
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR',
+      maximumFractionDigits: 0
     }).format(amount);
   };
 
@@ -125,152 +128,168 @@ const Dashboard = () => {
       <Navbar />
       <div className="dashboard">
         <div className="dashboard-container">
-          <h1>Dashboard</h1>
+          <div className="dashboard-header">
+            <h1>Dashboard</h1>
+            <Link to="/expense/add" className="add-expense-btn">
+              + Add Expense
+            </Link>
+          </div>
 
-          {/* Summary Cards */}
           {summary && (
             <div className="summary-cards">
               <div className="summary-card">
-                <h3>Total Expenses</h3>
-                <p className="summary-value">{summary.totalExpenses}</p>
+                <div className="summary-icon">📊</div>
+                <div className="summary-content">
+                  <h3>Total Expenses</h3>
+                  <p className="summary-value">{summary.totalExpenses}</p>
+                </div>
               </div>
               <div className="summary-card">
-                <h3>Total Amount</h3>
-                <p className="summary-value">{formatCurrency(summary.totalAmount)}</p>
+                <div className="summary-icon">💰</div>
+                <div className="summary-content">
+                  <h3>Total Spent</h3>
+                  <p className="summary-value">{formatCurrency(summary.totalAmount)}</p>
+                </div>
               </div>
               <div className="summary-card">
-                <h3>Average Expense</h3>
-                <p className="summary-value">{formatCurrency(summary.averageExpense)}</p>
+                <div className="summary-icon">📈</div>
+                <div className="summary-content">
+                  <h3>Average</h3>
+                  <p className="summary-value">{formatCurrency(summary.averageExpense)}</p>
+                </div>
               </div>
             </div>
           )}
 
-          {/* Filters */}
           <div className="filters-section">
-            <h2>Filters</h2>
-            <div className="filters-grid">
-              <div className="filter-group">
-                <label>Search</label>
-                <input
-                  type="text"
-                  placeholder="Search by description..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-              <div className="filter-group">
-                <label>Category</label>
-                <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                  <option value="">All Categories</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="filter-group">
-                <label>Start Date</label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-              </div>
-              <div className="filter-group">
-                <label>End Date</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </div>
-              <div className="filter-group">
-                <label>Min Amount</label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={minAmount}
-                  onChange={(e) => setMinAmount(e.target.value)}
-                />
-              </div>
-              <div className="filter-group">
-                <label>Max Amount</label>
-                <input
-                  type="number"
-                  placeholder="1000"
-                  value={maxAmount}
-                  onChange={(e) => setMaxAmount(e.target.value)}
-                />
-              </div>
-            </div>
-            <button onClick={clearFilters} className="clear-filters-btn">
-              Clear Filters
-            </button>
-          </div>
-
-          {/* Add Expense Button */}
-          <div className="actions-bar">
-            <Link to="/expense/add" className="add-expense-btn">
-              + Add Expense
-            </Link>
-            <div className="pagination-controls">
-              <label>
-                Items per page:
-                <select value={limit} onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}>
+            <div className="filters-bar">
+              <input
+                type="text"
+                placeholder="🔍 Search expenses..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="search-input"
+              />
+              <select 
+                value={category} 
+                onChange={(e) => setCategory(e.target.value)}
+                className="category-filter"
+              >
+                <option value="">All Categories</option>
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <div className="items-per-page">
+                <label>Show:</label>
+                <select 
+                  value={limit} 
+                  onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}
+                  className="limit-select"
+                >
                   <option value={10}>10</option>
                   <option value={20}>20</option>
                   <option value={50}>50</option>
+                  <option value={100}>100</option>
                 </select>
-              </label>
+              </div>
+              <button 
+                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)} 
+                className="advanced-filters-btn"
+              >
+                {showAdvancedFilters ? '▲ Hide Filters' : '▼ More Filters'}
+              </button>
+              {hasActiveFilters && (
+                <button onClick={clearFilters} className="clear-filters-btn">
+                  Clear All
+                </button>
+              )}
             </div>
+
+            {showAdvancedFilters && (
+              <div className="advanced-filters">
+                <div className="filter-group">
+                  <label>Start Date</label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="date-input"
+                  />
+                </div>
+                <div className="filter-group">
+                  <label>End Date</label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="date-input"
+                  />
+                </div>
+                <div className="filter-group">
+                  <label>Min Amount (₹)</label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={minAmount}
+                    onChange={(e) => setMinAmount(e.target.value)}
+                    className="amount-input"
+                  />
+                </div>
+                <div className="filter-group">
+                  <label>Max Amount (₹)</label>
+                  <input
+                    type="number"
+                    placeholder="10000"
+                    value={maxAmount}
+                    onChange={(e) => setMaxAmount(e.target.value)}
+                    className="amount-input"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Expenses Table */}
           {error && <div className="error-message">{error}</div>}
+          
           {loading ? (
             <div className="loading">Loading expenses...</div>
           ) : expenses.length === 0 ? (
-            <div className="no-expenses">No expenses found. Add your first expense!</div>
+            <div className="empty-state">
+              <div className="empty-state-icon">📝</div>
+              <h3>No Expenses Found</h3>
+              <p>Start tracking your expenses by adding your first one!</p>
+              <Link to="/expense/add" className="empty-add-btn">
+                + Add Your First Expense
+              </Link>
+            </div>
           ) : (
             <>
-              <div className="table-container">
-                <table className="expenses-table">
-                  <thead>
-                    <tr>
-                      <th onClick={() => handleSort('description')}>
-                        Description {sortBy === 'description' && (sortOrder === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th onClick={() => handleSort('amount')}>
-                        Amount {sortBy === 'amount' && (sortOrder === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th onClick={() => handleSort('category')}>
-                        Category {sortBy === 'category' && (sortOrder === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th onClick={() => handleSort('date')}>
-                        Date {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {expenses.map(expense => (
-                      <tr key={expense.id}>
-                        <td>{expense.description}</td>
-                        <td>{formatCurrency(expense.amount)}</td>
-                        <td><span className="category-badge">{expense.category}</span></td>
-                        <td>{formatDate(expense.date)}</td>
-                        <td>
-                          <Link to={`/expense/${expense.id}`} className="action-link">View</Link>
-                          <button onClick={() => handleDelete(expense.id)} className="delete-btn">
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="expenses-list">
+                {expenses.map(expense => (
+                  <div key={expense.id} className="expense-item">
+                    <div className="expense-main">
+                      <div className="expense-info">
+                        <h3 className="expense-description">{expense.description}</h3>
+                        <div className="expense-details">
+                          <span className="expense-category">{expense.category}</span>
+                          <span className="expense-date">{formatDate(expense.date)}</span>
+                        </div>
+                      </div>
+                      <div className="expense-amount">{formatCurrency(expense.amount)}</div>
+                    </div>
+                    <div className="expense-actions">
+                      <Link to={`/expense/${expense.id}`} className="action-btn view-btn">
+                        View Details
+                      </Link>
+                      <button onClick={() => handleDelete(expense.id)} className="action-btn delete-btn">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              {/* Pagination */}
               {pagination && pagination.totalPages > 1 && (
                 <div className="pagination">
                   <button
@@ -278,17 +297,17 @@ const Dashboard = () => {
                     disabled={page === 1}
                     className="pagination-btn"
                   >
-                    Previous
+                    ← Previous
                   </button>
                   <span className="pagination-info">
-                    Page {pagination.page} of {pagination.totalPages} ({pagination.total} total)
+                    Page {pagination.page} of {pagination.totalPages}
                   </span>
                   <button
                     onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
                     disabled={page === pagination.totalPages}
                     className="pagination-btn"
                   >
-                    Next
+                    Next →
                   </button>
                 </div>
               )}
@@ -301,4 +320,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
