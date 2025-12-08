@@ -23,6 +23,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'ExpenseFlow API is running!',
+    status: 'OK',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/expenses', expenseRoutes);
@@ -49,17 +58,22 @@ app.use((err, req, res, next) => {
 // Test database connection on startup
 const prisma = require('./prisma/client');
 
-// Start server
-app.listen(PORT, async () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📡 API available at http://localhost:${PORT}/api`);
-  
-  // Test database connection
-  try {
-    await prisma.$connect();
-    console.log('✅ Database connection successful');
-  } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
-  }
-});
+// Start server (only for local development)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, async () => {
+    console.log(`🚀 Server is running on port ${PORT}`);
+    console.log(`📡 API available at http://localhost:${PORT}/api`);
+    
+    // Test database connection
+    try {
+      await prisma.$connect();
+      console.log('✅ Database connection successful');
+    } catch (error) {
+      console.error('❌ Database connection failed:', error.message);
+    }
+  });
+}
+
+// Export for Vercel
+module.exports = app;
 
