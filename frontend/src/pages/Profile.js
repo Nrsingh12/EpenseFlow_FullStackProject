@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import './Profile.css';
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    currentPassword: '',
+    newPassword: ''
+  });
 
   useEffect(() => {
     fetchSummary();
-  }, []);
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        currentPassword: '',
+        newPassword: ''
+      });
+    }
+  }, [user]);
 
   const fetchSummary = async () => {
     try {
@@ -60,12 +79,63 @@ const Profile = () => {
     return Math.max(...Object.values(summary.monthlyTotals));
   };
 
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    try {
+      const updateData = {
+        name: formData.name,
+        email: formData.email
+      };
+
+      if (formData.newPassword) {
+        if (!formData.currentPassword) {
+          setError('Current password is required to change password');
+          return;
+        }
+        updateData.currentPassword = formData.currentPassword;
+        updateData.newPassword = formData.newPassword;
+      }
+
+      await api.put('/api/auth/profile', updateData);
+      setSuccess('Profile updated successfully');
+      setIsEditing(false);
+      setFormData({ ...formData, currentPassword: '', newPassword: '' });
+      window.location.reload();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update profile');
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const password = prompt('Enter your password to confirm account deletion:');
+    
+    if (!password) return;
+
+    if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await api.delete('/api/auth/profile', { password });
+      await logout();
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to delete account');
+    }
+  };
+
   return (
     <>
       <Navbar />
       <div className="profile">
         <div className="profile-container">
           <h1>Profile</h1>
+
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
 
           <div className="profile-header">
             <div className="user-avatar">
@@ -75,7 +145,65 @@ const Profile = () => {
               <h2>{user?.name}</h2>
               <p>{user?.email}</p>
             </div>
+            <div className="profile-actions">
+              <button onClick={() => setIsEditing(!isEditing)} className="edit-btn">
+                {isEditing ? 'Cancel' : 'Edit Profile'}
+              </button>
+              <button onClick={handleDeleteAccount} className="delete-btn">
+                Delete Account
+              </button>
+            </div>
           </div>
+
+          {isEditing && (
+            <div className="profile-card">
+              <h2>Edit Profile</h2>
+              <form onSubmit={handleUpdateProfile}>
+                <div className="form-group">
+                  <label htmlFor="name">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="currentPassword">Current Password (required to change password)</label>
+                  <input
+                    type="password"
+                    id="currentPassword"
+                    value={formData.currentPassword}
+                    onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
+                    placeholder="Leave blank to keep current password"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="newPassword">New Password</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    value={formData.newPassword}
+                    onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                    placeholder="Leave blank to keep current password"
+                    minLength="6"
+                  />
+                </div>
+                <button type="submit" className="save-btn">Save Changes</button>
+              </form>
+            </div>
+          )}
 
           {summary && (
             <>

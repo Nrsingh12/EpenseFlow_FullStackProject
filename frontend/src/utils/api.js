@@ -95,13 +95,14 @@ const api = {
     return responseData;
   },
 
-  delete: async (url) => {
+  delete: async (url, data) => {
     const response = await fetch(`${API_BASE_URL}${url}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         ...(authToken && { Authorization: `Bearer ${authToken}` })
-      }
+      },
+      ...(data && { body: JSON.stringify(data) })
     });
 
     let responseData;
