@@ -10,34 +10,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Middleware
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true
 }));
 app.use(express.json());
 
-// Request logging middleware (before routes)
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
 });
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'ExpenseFlow API is running!',
-    status: 'OK',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
-// Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -47,7 +34,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Error handling middleware (must be after routes)
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
@@ -55,25 +41,17 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Test database connection on startup
 const prisma = require('./prisma/client');
 
-// Start server (only for local development)
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, async () => {
-    console.log(`🚀 Server is running on port ${PORT}`);
-    console.log(`📡 API available at http://localhost:${PORT}/api`);
-    
-    // Test database connection
-    try {
-      await prisma.$connect();
-      console.log('✅ Database connection successful');
-    } catch (error) {
-      console.error('❌ Database connection failed:', error.message);
-    }
-  });
-}
-
-// Export for Vercel
-module.exports = app;
+app.listen(PORT, async () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📡 API available at http://localhost:${PORT}/api`);
+  
+  try {
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+  }
+});
 

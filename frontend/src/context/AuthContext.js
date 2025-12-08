@@ -16,12 +16,14 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-      api.setToken(token);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
+      
+      if (token && userData) {
+        setUser(JSON.parse(userData));
+        api.setToken(token);
+      }
     }
     setLoading(false);
   }, []);
@@ -31,8 +33,10 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/api/auth/login', { email, password });
       const { user, token } = response;
       
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+      }
       api.setToken(token);
       setUser(user);
       
@@ -50,8 +54,10 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/api/auth/signup', { email, password, name });
       const { user, token } = response;
       
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+      }
       api.setToken(token);
       setUser(user);
       
@@ -70,14 +76,17 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      // Clear all auth-related data
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      if (typeof window !== 'undefined') {
+        if (window.localStorage) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+        if (window.sessionStorage) {
+          sessionStorage.clear();
+        }
+      }
       api.setToken(null);
       setUser(null);
-      
-      // Clear any cached data
-      sessionStorage.clear();
     }
   };
 

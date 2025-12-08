@@ -6,7 +6,6 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Sign up
 router.post('/signup', async (req, res) => {
   try {
     const { email, password, name } = req.body;
@@ -15,7 +14,6 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ error: 'Email, password, and name are required' });
     }
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email }
     });
@@ -24,10 +22,8 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ error: 'User with this email already exists' });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
     const user = await prisma.user.create({
       data: {
         email,
@@ -42,7 +38,6 @@ router.post('/signup', async (req, res) => {
       }
     });
 
-    // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
@@ -60,7 +55,6 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -69,7 +63,6 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    // Find user
     const user = await prisma.user.findUnique({
       where: { email }
     });
@@ -78,14 +71,12 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
@@ -107,11 +98,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Logout (client-side token removal, but we can track it server-side if needed)
 router.post('/logout', authenticateToken, async (req, res) => {
   try {
-    // In a stateless JWT system, logout is handled client-side
-    // But we can add token blacklisting here if needed
     res.json({ message: 'Logout successful' });
   } catch (error) {
     console.error('Logout error:', error);
