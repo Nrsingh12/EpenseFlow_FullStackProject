@@ -25,9 +25,9 @@ const Profile = () => {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(amount);
   };
 
@@ -46,6 +46,20 @@ const Profile = () => {
     );
   }
 
+  const getInitials = (name) => {
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const getMaxAmount = () => {
+    if (!summary || !summary.monthlyTotals) return 0;
+    return Math.max(...Object.values(summary.monthlyTotals));
+  };
+
   return (
     <>
       <Navbar />
@@ -53,88 +67,99 @@ const Profile = () => {
         <div className="profile-container">
           <h1>Profile</h1>
 
-          <div className="profile-card">
-            <h2>User Information</h2>
-            <div className="profile-info">
-              <div className="info-item">
-                <span className="info-label">Name:</span>
-                <span className="info-value">{user?.name}</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Email:</span>
-                <span className="info-value">{user?.email}</span>
-              </div>
+          <div className="profile-header">
+            <div className="user-avatar">
+              {user?.name ? getInitials(user.name) : 'U'}
+            </div>
+            <div className="user-info">
+              <h2>{user?.name}</h2>
+              <p>{user?.email}</p>
             </div>
           </div>
 
           {summary && (
             <>
-              <div className="profile-card">
-                <h2>Expense Statistics</h2>
-                <div className="stats-grid">
-                  <div className="stat-item">
-                    <span className="stat-label">Total Expenses</span>
-                    <span className="stat-value">{summary.totalExpenses}</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">Total Amount</span>
-                    <span className="stat-value">{formatCurrency(summary.totalAmount)}</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">Average Expense</span>
-                    <span className="stat-value">{formatCurrency(summary.averageExpense)}</span>
-                  </div>
+              <div className="stats-overview">
+                <div className="stat-card">
+                  <h3>Total Expenses</h3>
+                  <div className="stat-value">{summary.totalExpenses}</div>
+                </div>
+                <div className="stat-card">
+                  <h3>Total Spent</h3>
+                  <div className="stat-value">{formatCurrency(summary.totalAmount)}</div>
+                </div>
+                <div className="stat-card">
+                  <h3>Average Expense</h3>
+                  <div className="stat-value">{formatCurrency(summary.averageExpense)}</div>
                 </div>
               </div>
 
-              <div className="profile-card">
-                <h2>Expenses by Category</h2>
-                <div className="category-list">
-                  {Object.entries(summary.categoryTotals).length > 0 ? (
-                    Object.entries(summary.categoryTotals)
-                      .sort((a, b) => b[1] - a[1])
-                      .map(([category, amount]) => (
-                        <div key={category} className="category-item">
-                          <span className="category-name">{category}</span>
-                          <span className="category-amount">{formatCurrency(amount)}</span>
-                        </div>
-                      ))
-                  ) : (
-                    <p className="no-data">No category data available</p>
-                  )}
+              <div className="profile-grid">
+                <div className="profile-card">
+                  <h2>Top Categories</h2>
+                  <div className="category-list">
+                    {Object.entries(summary.categoryTotals).length > 0 ? (
+                      Object.entries(summary.categoryTotals)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 5)
+                        .map(([category, amount], index) => (
+                          <div key={category} className="category-item">
+                            <div className="category-info">
+                              <div className="category-rank">{index + 1}</div>
+                              <span className="category-name">{category}</span>
+                            </div>
+                            <span className="category-amount">{formatCurrency(amount)}</span>
+                          </div>
+                        ))
+                    ) : (
+                      <p className="no-data">No category data available</p>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="profile-card">
-                <h2>Monthly Spending (Last 6 Months)</h2>
-                <div className="monthly-list">
-                  {Object.entries(summary.monthlyTotals).length > 0 ? (
-                    Object.entries(summary.monthlyTotals)
-                      .reverse()
-                      .map(([month, amount]) => (
-                        <div key={month} className="monthly-item">
-                          <span className="monthly-name">{month}</span>
-                          <span className="monthly-amount">{formatCurrency(amount)}</span>
-                        </div>
-                      ))
-                  ) : (
-                    <p className="no-data">No monthly data available</p>
-                  )}
+                <div className="profile-card">
+                  <h2>Monthly Spending</h2>
+                  <div className="monthly-trend">
+                    {Object.entries(summary.monthlyTotals).length > 0 ? (
+                      Object.entries(summary.monthlyTotals)
+                        .reverse()
+                        .slice(0, 6)
+                        .map(([month, amount]) => (
+                          <div key={month} className="trend-bar">
+                            <div className="trend-header">
+                              <span className="trend-month">{month}</span>
+                              <span className="trend-amount">{formatCurrency(amount)}</span>
+                            </div>
+                            <div className="trend-progress">
+                              <div 
+                                className="trend-fill" 
+                                style={{ width: `${(amount / getMaxAmount()) * 100}%` }}
+                              />
+                            </div>
+                          </div>
+                        ))
+                    ) : (
+                      <p className="no-data">No monthly data available</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {summary.recentExpenses && summary.recentExpenses.length > 0 && (
-                <div className="profile-card">
-                  <h2>Recent Expenses</h2>
+                <div className="profile-card full-width">
+                  <h2>Recent Activity</h2>
                   <div className="recent-expenses">
-                    {summary.recentExpenses.map(expense => (
+                    {summary.recentExpenses.slice(0, 5).map(expense => (
                       <div key={expense.id} className="recent-item">
+                        <div className="recent-icon">💳</div>
                         <div className="recent-info">
                           <span className="recent-description">{expense.description}</span>
                           <span className="recent-category">{expense.category}</span>
                         </div>
-                        <div className="recent-amount">{formatCurrency(expense.amount)}</div>
-                        <div className="recent-date">{formatDate(expense.date)}</div>
+                        <div className="recent-right">
+                          <div className="recent-amount">{formatCurrency(expense.amount)}</div>
+                          <div className="recent-date">{formatDate(expense.date)}</div>
+                        </div>
                       </div>
                     ))}
                   </div>
